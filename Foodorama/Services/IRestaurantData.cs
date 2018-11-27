@@ -8,5 +8,6 @@ namespace Foodorama.Services
         IEnumerable<Restaurant> GetAll();
         Restaurant Get(int id);
         Restaurant Add(Restaurant restaurant);
+        Restaurant Update(Restaurant restaurant);
     }
 }

@@ -1,10 +1,12 @@
 ﻿using Foodorama.Models;
 using Foodorama.Services;
 using Foodorama.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Foodorama.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private IRestaurantData _restaurantData;
@@ -16,11 +18,14 @@ namespace Foodorama.Controllers
             _greeter = greeter;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
-            var model = new HomeIndexViewModel();
-            model.Restaurants = _restaurantData.GetAll();
-            model.CurrentMessage = _greeter.GetMessageOfTheDay();
+            var model = new HomeIndexViewModel
+            {
+                Restaurants = _restaurantData.GetAll(),
+                CurrentMessage = _greeter.GetMessageOfTheDay()
+            };
 
             return View(model);
         }
@@ -47,9 +52,11 @@ namespace Foodorama.Controllers
         {
             if (ModelState.IsValid)
             {
-                var newRestaurant = new Restaurant();
-                newRestaurant.Name = model.Name;
-                newRestaurant.Cuisine = model.Cuisine;
+                var newRestaurant = new Restaurant
+                {
+                    Name = model.Name,
+                    Cuisine = model.Cuisine
+                };
 
                 newRestaurant = _restaurantData.Add(newRestaurant);
 
